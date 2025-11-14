@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>祝生日快乐美玲宝宝</title>
+    <style>
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .title {
+            color: #e91e63;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 15px;
+        }
+        .btn {
+            background-color: #e91e63;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+        .btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .popup {
+            position: fixed;
+            width: 220px;
+            height: 100px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: popIn 0.3s ease-out;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        @keyframes popIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+        .popup .close {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+        .popup .content {
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="title">生日快乐美美宝宝</h1>
+    <div class="btn-group">
+        <button id="startBtn" class="btn">点这里有本宝宝的爱哟❤️</button>
+        <button id="closeAllBtn" class="btn">收下啦❤️</button>
+    </div>
+
+    <script>
+        const startBtn = document.getElementById('startBtn');
+        const closeAllBtn = document.getElementById('closeAllBtn');
+        const bgColors = [
+            '#ffc0cb', '#ffb6c1', '#ff69b4', '#ff1493', '#db7093', 
+            '#bc8f8f', '#c71585', '#ffa07a', '#ff7f50', '#ffa500', 
+            '#ffffe0', '#ebe6fa', '#d8bfd8', '#dda0dd', '#eeB2ee'
+        ];
+        const commonWishes = [
+            '亲爱的宝宝生日快乐❤️', '每天都有好心情🩷', '成为我最幸福的宝宝🫡', 
+            '世界上最可爱的人😜', '每天都可以吃到好吃的😍', '在工作上每天都轻松🎉', 
+            '每天都想见到你🥰', '有一个健康的身体😘', '每天我都超级爱你😍', 
+            '也要一直喜欢我🫶🏻！'
+        ];
+        let specialWishShown = false;
+
+        startBtn.addEventListener('click', () => {
+            startBtn.disabled = true;
+            let count = 0;
+            const interval = setInterval(() => {
+                if (count >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        startBtn.disabled = false;
+                    }, 5000);
+                    return;
+                }
+                createPopup();
+                count++;
+            }, 50);
+        });
+
+        closeAllBtn.addEventListener('click', () => {
+            const popups = document.querySelectorAll('.popup');
+            popups.forEach(popup => popup.remove());
+            specialWishShown = false;
+            startBtn.disabled = false;
+        });
+
+        function createPopup() {
+            const popup = document.createElement('div');
+            popup.className = 'popup';
+            popup.style.backgroundColor = bgColors[Math.floor(Math.random() * bgColors.length)];
+            
+            const closeBtn = document.createElement('div');
+            closeBtn.className = 'close';
+            closeBtn.textContent = 'x';
+            closeBtn.addEventListener('click', () => {
+                popup.remove();
+            });
+
+            const content = document.createElement('div');
+            content.className = 'content';
+            let wish;
+            if (!specialWishShown && Math.random() < 0.1) {
+                wish = '我的心里只有你😘！';
+                specialWishShown = true;
+            } else {
+                wish = commonWishes[Math.floor(Math.random() * commonWishes.length)];
+            }
+            content.textContent = wish;
+
+            popup.appendChild(closeBtn);
+            popup.appendChild(content);
+
+            const maxLeft = window.innerWidth - 220;
+            const maxTop = window.innerHeight - 100;
+            popup.style.left = `${Math.floor(Math.random() * maxLeft)}px`;
+            popup.style.top = `${Math.floor(Math.random() * maxTop)}px`;
+
+            document.body.appendChild(popup);
+        }
+    </script>
+</body>
+</html>
